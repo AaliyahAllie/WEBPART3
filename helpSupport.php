@@ -101,7 +101,7 @@
                 </div>
                 <div>
                     <h3>Where can I find the user manual?</h3>
-                    <p>The user manual can be downloaded from our website's 'Resources' section.</p>
+                    <p>The user manual can be downloaded from our website's 'About Us' section, under "How it Works"</p>
                 </div>
             </section>
 

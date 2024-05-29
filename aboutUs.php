@@ -83,22 +83,22 @@
             <div class="card">
                 <h2>Who we are</h2>
                 <p>We are a business aiming to help users sell and buy preloved clothes</p>
-                <button>let's go</button>
+                <a href="whoWeAre.php"><button>let's go</button></a>
             </div>
             <div class="card">
                 <h2>How it works</h2>
                 <p>Click the button to find out how we achieve our goals</p>
-                <button>let's go</button>
+                <a href="Howitworks.php"><button>let's go</button></a>
             </div>
             <div class="card">
                 <h2>Our Ratings</h2>
                 <p>Click the button to find out more</p>
-                <button>let's go</button>
+                <a href="ourRates.php"><button>let's go</button></a>
             </div>
             <div class="card">
                 <h2>Help & Support</h2>
                 <p>Click the button to find out more</p>
-                <button>let's go</button>
+                <a href="helpSupport.php"><button>let's go</button></a>
             </div>
         </div>
     </div>
