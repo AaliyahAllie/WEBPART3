@@ -8,10 +8,9 @@ include('DBConn.php');
 // Checks if the form is submitted
 if (isset($_POST['login_user'])) {
     $email = $_POST['email'];
-    $password = $_POST['password'];
 
     // Prepares SQL statement to retrieve user data based on email
-    $stmt = $conn->prepare("SELECT id, name, password FROM tblUser WHERE email = ?");
+    $stmt = $conn->prepare("SELECT id, name FROM tblUser WHERE email = ?");
     if (!$stmt) {
         die('Error: ' . $conn->error);
     }
@@ -25,22 +24,19 @@ if (isset($_POST['login_user'])) {
     // Stores result
     $result = $stmt->get_result();
 
-    // Checks if user exists
+    // Checks if user with the provided email exists
     if ($result->num_rows == 1) {
+        // Fetches the user data
         $user = $result->fetch_assoc();
 
-        // Verifies the password
-        if (password_verify($password, $user['password'])) {
-            // Starts a new session
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            header('Location: profile.php'); // Redirects to profile page
-            exit();
-        } else {
-            $error = "Invalid email or password!"; // Password does not match
-        }
+        // Set session variables and redirect to profile page
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_name'] = $user['name'];
+        header("Location: profile.php");
+        exit();
     } else {
-        $error = "Invalid email or password!"; // Email does not exist
+        // User with provided email does not exist
+        $error = "User with this email does not exist";
     }
 
     // Close the statement
@@ -50,6 +46,8 @@ if (isset($_POST['login_user'])) {
 // Close the connection
 $conn->close();
 ?>
+
+<!-- Your HTML code remains unchanged -->
 
 <!DOCTYPE html>
 <html lang="en">

@@ -125,6 +125,10 @@ try {
     <a href="catalog.php" class="button">View Items</a>
     <br>
     <br>
+    <p>Would you like to view your purchase history?</p>
+    <a href="purchaseHistory.php" class="button">Purchase History</a>
+    <br>
+    <br>
     <a href="logout.php" class="button">Logout</a>
 </body>
 
