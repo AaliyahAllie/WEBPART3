@@ -1,0 +1,5 @@
+John Doe j.doe@abc.co.za 29ef52e7563626a96cea7f4b4085c124
+Jane Smith j.smith@example.com 5ebe2294ecd0e0f08eab7690d2a6ee69
+Alice Johnson a.johnson@test.com 1a79a4d60de6718e8e5b326e338ae533
+Bob Brown b.brown@example.org 6c8349cc7260ae62e3b1396831a8398f
+Eve Wilson e.wilson@example.net 1bbd732b398881dee3a715d91a7b92a6
