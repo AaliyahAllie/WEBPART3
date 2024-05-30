@@ -122,7 +122,7 @@ try {
     <a href="sell.php" class="button">Post Item</a>
     <br>
     <p>Would You Like To View Items You Are Selling?</p>
-    <a href="catalog.php" class="button">View Items</a>
+    <a href="USERcatalog.php" class="button">View Items</a>
     <br>
     <br>
     <p>Would you like to view your purchase history?</p>

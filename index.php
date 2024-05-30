@@ -66,7 +66,7 @@
                     <a href="profile.php">Profile</a>
                     <a href="adminRegister.php">Sign Up as Admin</a>
                     <a href="adminLogin.php">Login as Admin</a>
-                    <a href="adminHomePage">Admin Controls</a>
+                    <a href="adminHomePage.php">Admin Controls</a>
                     <a href="userRegister.php">Sign Up as User</a>
                     <a href="userLogin.php">Login as User</a>
                 </div>

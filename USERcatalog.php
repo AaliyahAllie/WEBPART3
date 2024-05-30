@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clothing Catalog</title>
-    <!--stylesheet============================================-->
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+        <!--stylesheet============================================-->
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
 
-    <!--fav-icon===============================================-->
-    <link rel="shortcut icon" href=""/>
-    <!--this is the tab icon^^^^-->
+<!--fav-icon===============================================-->
+<link rel="shortcut icon" href=""/>
+<!--this is the tab icon^^^^-->
 
-    <!--using-FontAwesome======================================-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!--using-FontAwesome======================================-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!--Import-Poppins-Font-Family=============================-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<!--Import-Poppins-Font-Family=============================-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -127,7 +127,7 @@
         </form>
     </div>
 
-    <h2 class="text-center">Items in tblClothes</h2>
+    <h2 class="text-center">Items in userClothes</h2>
     <table class="table table-striped table-bordered mt-4">
         <thead class="thead-dark">
             <tr>
@@ -144,7 +144,7 @@
 
         $servername = "localhost";
         $username = "AaliyahNicol";
-        $password= "AaliyahNicol";
+        $password = "AaliyahNicol";
         $dbname = "ClothingStore";
 
         // Create connection
@@ -166,13 +166,13 @@
                     $itemPrice = $_POST['itemPrice'];
                     $itemImage = file_get_contents($_FILES['itemImage']['tmp_name']); // Read the uploaded image
 
-                    $stmt = $conn->prepare("INSERT INTO tblClothes (itemName, itemDescription, itemSize, itemPrice, Image) VALUES (?, ?, ?, ?, ?)");
+                    $stmt = $conn->prepare("INSERT INTO userClothes (itemName, itemDescription, itemSize, itemPrice, Image) VALUES (?, ?, ?, ?, ?)");
                     $stmt->bind_param("sssss", $itemName, $itemDescription, $itemSize, $itemPrice, $itemImage);
                     $stmt->execute();
                     $stmt->close();
                 } elseif ($action == 'delete' && isset($_POST['item_id'])) {
                     $itemId = $_POST['item_id'];
-                    $stmt = $conn->prepare("DELETE FROM tblClothes WHERE id = ?");
+                    $stmt = $conn->prepare("DELETE FROM userClothes WHERE id = ?");
                     $stmt->bind_param("i", $itemId);
                     $stmt->execute();
                     $stmt->close();
@@ -186,10 +186,10 @@
                     // Check if a new image is uploaded
                     if ($_FILES['itemImage']['size'] > 0) {
                         $itemImage = file_get_contents($_FILES['itemImage']['tmp_name']); // Read the uploaded image
-                        $stmt = $conn->prepare("UPDATE tblClothes SET itemName = ?, itemDescription = ?, itemSize = ?, itemPrice = ?, Image = ? WHERE id = ?");
+                        $stmt = $conn->prepare("UPDATE userClothes SET itemName = ?, itemDescription = ?, itemSize = ?, itemPrice = ?, Image = ? WHERE id = ?");
                         $stmt->bind_param("sssssi", $itemName, $itemDescription, $itemSize, $itemPrice, $itemImage, $itemId);
                     } else {
-                        $stmt = $conn->prepare("UPDATE tblClothes SET itemName = ?, itemDescription = ?, itemSize = ?, itemPrice = ? WHERE id = ?");
+                        $stmt = $conn->prepare("UPDATE userClothes SET itemName = ?, itemDescription = ?, itemSize = ?, itemPrice = ? WHERE id = ?");
                         $stmt->bind_param("ssssi", $itemName, $itemDescription, $itemSize, $itemPrice, $itemId);
                     }
 
@@ -199,14 +199,14 @@
             }
         }
 
-        $sql = "SELECT * FROM tblClothes";
+        $sql = "SELECT * FROM userClothes";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'></td>";
+                echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' alt='" . $row['itemName'] . "' class='item-image'></td>";
                 echo "<td>" . $row['itemName'] . "</td>";
                 echo "<td>" . $row['itemDescription'] . "</td>";
                 echo "<td>" . $row['itemSize'] . "</td>";
@@ -214,11 +214,10 @@
                 echo "<td>
                     <form method='post' style='display:inline-block'>
                         <input type='hidden' name='action' value='delete'>
-                        <input type='hidden' name='
-                        item_id' value='" . $row['id'] . "'>
+                        <input type='hidden' name='item_id' value='" . $row['id'] . "'>
                         <button type='submit' class='delete-button'>Delete</button>
-                        </form>
-                        <form method='post' style='display:inline-block' enctype='multipart/form-data'>
+                    </form>
+                    <form method='post' style='display:inline-block' enctype='multipart/form-data'>
                         <input type='hidden' name='action' value='edit'>
                         <input type='hidden' name='item_id' value='" . $row['id'] . "'>
                         <input type='text' name='itemName' class='form-control' value='" . $row['itemName'] . "' required>
@@ -226,68 +225,25 @@
                         <input type='text' name='itemSize' class='form-control' value='" . $row['itemSize'] . "' required>
                         <input type='text' name='itemPrice' class='form-control' value='" . $row['itemPrice'] . "' required>
                         <input type='file' name='itemImage' class='form-control-file' accept='image/*'>
-                        <img src='data
-                        /jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'>
-                        
                         <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
-                        </form>
-                        </td>";
-                        echo "</tr>";
-                        }
-                        } else {
-                        echo "<tr><td colspan='6'>0 results</td></tr>";
-                        }
-                        echo "<h2 class='text-center'>User Clothes</h2>"; // Table heading for user clothes
-                        echo "<table class='table table-striped table-bordered mt-4'>"; // Start the table
-                        echo "<thead class='thead-dark'>"; // Table header
-                        echo "<tr>"; // Table row for column headings
-                        echo "<th>Image</th>";
-                        echo "<th>Name</th>";
-                        echo "<th>Description</th>";
-                        echo "<th>Size</th>";
-                        echo "<th>Price</th>";
-                        echo "<th>Actions</th>";
-                        echo "</tr>";
-                        echo "</thead>";
-                        echo "<tbody>";
-                        
-                        // Fetch data from the userClothes table
-                        $sql = "SELECT * FROM userClothes"; 
-                        $result = $conn->query($sql);
-                        
-                        if ($result->num_rows > 0) {
-                            // Output data of each row
-                            while($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'></td>";
-                                echo "<td>" . $row['itemName'] . "</td>";
-                                echo "<td>" . $row['itemDescription'] . "</td>";
-                                echo "<td>" . $row['itemSize'] . "</td>";
-                                echo "<td>$" . $row['itemPrice'] . "</td>";
-                                echo "<td>
-                                        <form method='post' style='display:inline-block'>
-                                            <input type='hidden' name='action' value='delete'>
-                                            <input type='hidden' name='item_id' value='" . $row['id'] . "'>
-                                            <button type='submit' class='delete-button'>Delete</button>
-                                        </form>
-                                        <form method='post' style='display:inline-block' enctype='multipart/form-data'>
-                                            <input type='hidden' name='action' value='edit'>
-                                            <input type='hidden' name='item_id' value='" . $row['id'] . "'>
-                                            <input type='text' name='itemName' class='form-control' value='" . $row['itemName'] . "' required>
-                                            <textarea name='itemDescription' class='form-control' required>" . $row['itemDescription'] . "</textarea>
-                                            <input type='text' name='itemSize' class='form-control' value='" . $row['itemSize'] . "' required>
-                                            <input type='text' name='itemPrice' class='form-control' value='" . $row['itemPrice'] . "' required>
-                                            <input type='file' name='itemImage' class='form-control-file' accept='image/*'>
-                                            <img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'>
-                                            <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
-                                        </form>
-                                      </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>0 results</td></tr>";
-                        }
-                        
-                        echo "</tbody>";
-                        echo "</table>"; // End the table
-                        
+                    </form>
+                  </td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='6'>0 results</td></tr>";
+        }
+
+        $conn->close();
+        ?>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+

@@ -82,8 +82,16 @@
         <h4>To add a user, update, or delete a user, click the button.</h4>
         <!-- when button is clicked it will redirect to the next page which is where admin controls will be found-->
         <button type="submit" class="btn btn-primary">User Controls</button>
+        <br>
     </form>
 </div>
+        <h4>To add,delete or edit items, click the button</h4>
+         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
+         <a href="catalog.php"><button type="submit" class="btn btn-primary">Item Controls</button></a>
+         <h4>To view orders, click the button</h4>
+         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
+         <a href="orderLine.php"><button type="submit" class="btn btn-primary">Order Line</button></a>
+
 
 
 </body>
