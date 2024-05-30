@@ -91,8 +91,11 @@
          <h4>To view orders, click the button</h4>
          <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
          <a href="orderLine.php"><button type="submit" class="btn btn-primary">Order Line</button></a>
-
-
-
+         <h4>To view orders, click the button</h4>
+         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
+         <a href="message.php"><button type="submit" class="btn btn-primary">Message Seller</button></a>
+         <h4>Verfiy Users</h4>
+         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
+         <a href="verfiy_request.php"><button type="submit" class="btn btn-primary">Verfiy</button></a>
 </body>
 </html>

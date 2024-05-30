@@ -10,7 +10,7 @@ if (isset($_POST['login_user'])) {
     $email = $_POST['email'];
 
     // Prepares SQL statement to retrieve user data based on email
-    $stmt = $conn->prepare("SELECT id, name FROM tblUser WHERE email = ?");
+    $stmt = $conn->prepare("SELECT id, name, verified FROM tblUser WHERE email = ?");
     if (!$stmt) {
         die('Error: ' . $conn->error);
     }
@@ -29,11 +29,17 @@ if (isset($_POST['login_user'])) {
         // Fetches the user data
         $user = $result->fetch_assoc();
 
-        // Set session variables and redirect to profile page
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        header("Location: profile.php");
-        exit();
+        // Check if the user is verified by the admin
+        if ($user['verified'] == 1) {
+            // Set session variables and redirect to profile page
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
+            header("Location: profile.php");
+            exit();
+        } else {
+            // User is not verified by the admin
+            $error = "Your account is not verified by the admin yet.";
+        }
     } else {
         // User with provided email does not exist
         $error = "User with this email does not exist";
@@ -46,6 +52,7 @@ if (isset($_POST['login_user'])) {
 // Close the connection
 $conn->close();
 ?>
+
 
 <!-- Your HTML code remains unchanged -->
 

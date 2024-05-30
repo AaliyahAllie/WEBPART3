@@ -1,3 +1,26 @@
+<?php
+session_start();
+include('DBConn.php');
+
+// Fetch login requests where verified status is 0
+$stmt = $conn->prepare("SELECT id, name, email FROM tblUser WHERE verified = 0");
+if (!$stmt) {
+    die('Error: ' . $conn->error);
+}
+$stmt->execute();
+$result = $stmt->get_result();
+$stmt->close();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify User Requests</title>
+    <!-- Add your CSS links here -->
+</head>
+<body>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +43,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Link to jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        /* Basic button styling */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid #4CAF50; /* Green border */
+  color: #ffffff; /* White text */
+  background-color: #4CAF50; /* Green background */
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Hover effect */
+.button:hover {
+  background-color: #45a049; /* Darker green on hover */
+  border-color: #45a049; /* Darker green border on hover */
+}
+
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -57,47 +103,35 @@
         </div>
     </nav>
     <br>
+<br>
     <br>
     <br>
 
-    <!-- Cart Page Content -->
-
-    <!-- Cart Title -->
-    <h2 class="cart-tile">Your Cart</h2>
-    <!-- Cart Content -->
-    <div class="cart-content">
-        <!-- Individual Cart Items -->
-        <div class="cart-box">
-            <!-- Product Image -->
-            <img src="image/p-2.jpg" alt="" class="cart-img">
-            <!-- Product Details -->
-            <div class="detail-box">
-                <!-- Product Title -->
-                <div class="cart-product-title">Pleated Trousers</div>
-                <!-- Product Price -->
-                <div class="cart-price">R170.00</div>
-                <!-- Quantity Input -->
-                <input type="number" value="1" class="cart-quantity">
-            </div>
-            <!-- Remove Cart Button -->
-            <i class="fa-solid fa-trash"></i>
-        </div>
-    </div>
-    <!-- Total Price -->
-    <div class="total">
-        <!-- Total Title -->
-        <div class="total-tile">Total</div>
-        <!-- Total Price Display -->
-        <div class="total-price">R0.00</div>
-    </div>
-    <!-- Check-Out Button -->
-    <button type="button" class="btn-buy">Check-Out</button>
-    <!-- Close Cart Button -->
-    <i class="fa-solid fa-x" id="close-cart"></i>
-    <!-- Closing div tag for cart-content -->
-    </div>
-
-    <!-- Link to JavaScript file -->
-    <script src="js/main.js"></script>
+    <h2>Verify User Requests</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['name']; ?></td>
+                    <td><?php echo $row['email']; ?></td>
+                    <td>
+                        <form action="verifyUser.php" method="post">
+                            <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                            <button class="button"> <input type="submit" value="Verify" name="verify_user"></button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
 </body>
 </html>

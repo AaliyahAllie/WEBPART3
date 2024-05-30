@@ -111,7 +111,7 @@ function validateUser($email, $password, $conn) {
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="text-center mb-4">User Login</h2>
+                        <h2 class="text-center mb-4">Admin Login</h2>
                         <?php if(isset($error)) { ?>
                             <div class="alert alert-danger" role="alert">
                                 <?php echo $error; ?>
@@ -119,7 +119,7 @@ function validateUser($email, $password, $conn) {
                         <?php } ?>
                         <div class="container-fluid my-3">
                             <div class="text-center">
-                                <h2>Login as a user</h2>
+                                <h2>Login as a admin</h2>
                             </div>
                             <div class="row d-flex align-items-center justify-content-center">
                                 <div class="col-lg-12 col-xl-6">
@@ -139,7 +139,7 @@ function validateUser($email, $password, $conn) {
                                             <input type="submit" value="Login" class="bg-info py-2 px-3 border-0" name="login_user">
                                         </div>
                                         <!--if user doesnt have an account theres a link for them to register-->
-                                        <p>Don't have an account yet?<a href="userRegister.php">Register</a></p>
+                                        <p>Don't have an account yet?<a href="adminRegister.php">Register</a></p>
                                     </form>
                                 </div>
                             </div>
