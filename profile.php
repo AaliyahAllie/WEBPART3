@@ -117,7 +117,9 @@ try {
 }
 ?>
 <!-- User Profile Section ==================================== -->
-   
+    <p>Would You Like To Request Access To Selling Items?</p>
+    <a href="sell_item.php" class="button">sell Item</a>
+
     <p>Would You Like To Sell An Item?</p>
     <a href="sell.php" class="button">Post Item</a>
     <br>
