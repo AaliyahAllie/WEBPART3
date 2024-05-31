@@ -230,6 +230,14 @@
                         /jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'>
                         
                         <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
+                        <!-- Inside the while loop for displaying items -->
+<button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "'>Add to Shop</button>
+<!-- Add remove from shop button -->
+<form method='post' style='display:inline-block'>
+    <input type='hidden' name='action' value='remove'>
+    <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+    <button type='submit' class='remove-from-shop-button btn btn-danger mt-2'>Remove from Shop</button>
+
                         </form>
                         </td>";
                         echo "</tr>";
@@ -280,6 +288,13 @@
                                             <input type='file' name='itemImage' class='form-control-file' accept='image/*'>
                                             <img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'>
                                             <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
+                                            <!-- Inside the while loop for displaying items -->
+                                            <button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "'>Add to Shop</button>
+                                            <!-- Add remove from shop button -->
+                                            <form method='post' style='display:inline-block'>
+                                                <input type='hidden' name='action' value='remove'>
+                                                <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+                                                <button type='submit' class='remove-from-shop-button btn btn-danger mt-2'>Remove from Shop</button>
                                         </form>
                                       </td>";
                                 echo "</tr>";

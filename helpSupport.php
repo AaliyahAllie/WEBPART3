@@ -1,3 +1,39 @@
+<?php
+// Database configuration
+$servername = "localhost";
+$username = "AaliyahNicol";
+$password = "AaliyahNicol";
+$database = "ClothingStore";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Escape user inputs for security
+    $name = $conn->real_escape_string($_POST['name']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $message = $conn->real_escape_string($_POST['message']);
+    
+    // Insert user message into database
+    $sql = "INSERT INTO userHelp (name, email, message) VALUES ('$name', '$email', '$message')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Message submitted successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Close connection
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,7 +143,7 @@
 
             <section id="contact" class="contact-form">
                 <h2>Contact Us</h2>
-                <form action="submit_form.php" method="POST">
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                     <div>
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" required>

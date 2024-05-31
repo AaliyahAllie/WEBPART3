@@ -1,103 +1,130 @@
+<?php
+session_start();
+
+$servername = "localhost";
+$username = "AaliyahNicol";
+$password= "AaliyahNicol";
+$dbname = "ClothingStore";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+function getItemDetails($itemId, $conn) {
+    $stmt = $conn->prepare("SELECT * FROM tblClothes WHERE id = ?");
+    $stmt->bind_param("i", $itemId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $item = $result->fetch_assoc();
+    $stmt->close();
+    return $item;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['action']) && $_POST['action'] == 'checkout') {
+        $orderTotal = 0;
+        $orderItems = [];
+
+        foreach ($_SESSION['cart'] as $itemId => $quantity) {
+            $item = getItemDetails($itemId, $conn);
+            $orderTotal += $item['itemPrice'] * $quantity;
+            $orderItems[] = [
+                'itemName' => $item['itemName'],
+                'itemPrice' => $item['itemPrice'],
+                'quantity' => $quantity,
+                'Image' => $item['Image']
+            ];
+        }
+
+        // Insert order into tblOrders
+        $stmt = $conn->prepare("INSERT INTO tblOrders (orderTotal) VALUES (?)");
+        $stmt->bind_param("d", $orderTotal);
+        $stmt->execute();
+        $orderId = $stmt->insert_id;
+        $stmt->close();
+
+        // Insert order items into orderLine and decrement stock
+        foreach ($orderItems as $orderItem) {
+            $stmt = $conn->prepare("INSERT INTO orderLine (orderId, itemName, itemPrice, quantity, Image) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("issis", $orderId, $orderItem['itemName'], $orderItem['itemPrice'], $orderItem['quantity'], $orderItem['Image']);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        // Empty the cart
+        $_SESSION['cart'] = [];
+
+        echo "Order placed successfully! Your order number is: " . $orderId;
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta charset declaration -->
     <meta charset="UTF-8">
-    <!-- Responsive viewport declaration -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Title of the page -->
-    <title>Past'd Times</title>
-    <!-- Link to external stylesheet -->
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
-    <!-- Link to shortcut icon -->
-    <link rel="shortcut icon" href=""/>
-    <!-- Link to Font Awesome library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Preconnect links for Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Link to Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <!-- Link to jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Cart</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .item-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navigation">
-        <!-- Logo -->
-        <a href="#" class="logo">past'd times</a>
-        <!-- Menu -->
-        <ul class="menu">
-            <li><a href="index.php">Home</a></li>
-            <li><a href="categories.php">Shop</a></li>
-            <li><a href="products.php">Products</a></li>
-            <li><a href="aboutUs.php">About Us</a></li>
-        </ul>
-        <!-- Right Elements (Search, Cart, Favourites, User Dropdown) -->
-        <div class="right-elements">
-            <a href="#" class="search"><i class="fa-solid fa-magnifying-glass"></i></a>
-            <a href="cart.php" class="cart" class="active"><i class="fas fa-shopping-bag"></i></a>
-            <a href="favourites.php" class="favourites"><i class="fa fa-heart" aria-hidden="true"></i></a>
-            <!-- User Dropdown -->
-            <div class="dropdown">
-                <button class="dropbtn">
-                    <i class="fas fa-user"></i> 
-                    <i class="fas fa-caret-down"></i>
-                </button>
-                <!-- Dropdown Content (User Options) -->
-                <div class="dropdown-content">
-                    <a href="profile.php">Profile</a>
-                    <a href="adminRegister.php">Sign Up as Admin</a>
-                    <a href="adminLogin.php">Login as Admin</a>
-                    <a href="adminHomePage">Admin Controls</a>
-                    <a href="userRegister.php">Sign Up as User</a>
-                    <a href="userLogin.php">Login as User</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <br>
-    <br>
-    <br>
+<div class="container mt-5">
+    <h1 class="text-center">Shopping Cart</h1>
+    <?php
+    if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
+        echo "<table class='table table-striped table-bordered mt-4'>";
+        echo "<thead class='thead-dark'>";
+        echo "<tr>";
+        echo "<th>Image</th>";
+        echo "<th>Name</th>";
+        echo "<th>Price</th>";
+        echo "<th>Quantity</th>";
+        echo "<th>Total</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
 
-    <!-- Cart Page Content -->
+        $totalPrice = 0;
 
-    <!-- Cart Title -->
-    <h2 class="cart-tile">Your Cart</h2>
-    <!-- Cart Content -->
-    <div class="cart-content">
-        <!-- Individual Cart Items -->
-        <div class="cart-box">
-            <!-- Product Image -->
-            <img src="image/p-2.jpg" alt="" class="cart-img">
-            <!-- Product Details -->
-            <div class="detail-box">
-                <!-- Product Title -->
-                <div class="cart-product-title">Pleated Trousers</div>
-                <!-- Product Price -->
-                <div class="cart-price">R170.00</div>
-                <!-- Quantity Input -->
-                <input type="number" value="1" class="cart-quantity">
-            </div>
-            <!-- Remove Cart Button -->
-            <i class="fa-solid fa-trash"></i>
-        </div>
-    </div>
-    <!-- Total Price -->
-    <div class="total">
-        <!-- Total Title -->
-        <div class="total-tile">Total</div>
-        <!-- Total Price Display -->
-        <div class="total-price">R0.00</div>
-    </div>
-    <!-- Check-Out Button -->
-    <button type="button" class="btn-buy">Check-Out</button>
-    <!-- Close Cart Button -->
-    <i class="fa-solid fa-x" id="close-cart"></i>
-    <!-- Closing div tag for cart-content -->
-    </div>
+        foreach ($_SESSION['cart'] as $itemId => $quantity) {
+            $item = getItemDetails($itemId, $conn);
+            $itemTotal = $item['itemPrice'] * $quantity;
+            $totalPrice += $itemTotal;
 
-    <!-- Link to JavaScript file -->
-    <script src="js/main.js"></script>
+            echo "<tr>";
+            echo "<td><img src='data:image/jpeg;base64," . base64_encode($item['Image']) . "' class='item-image'></td>";
+            echo "<td>" . $item['itemName'] . "</td>";
+            echo "<td>$" . $item['itemPrice'] . "</td>";
+            echo "<td>" . $quantity . "</td>";
+            echo "<td>$" . $itemTotal . "</td>";
+            echo "</tr>";
+        }
+
+        echo "<tr>";
+        echo "<td colspan='4' class='text-right'><strong>Total:</strong></td>";
+        echo "<td><strong>$" . $totalPrice . "</strong></td>";
+        echo "</tr>";
+
+        echo "</tbody>";
+        echo "</table>";
+
+        echo "<form method='post'>";
+        echo "<input type='hidden' name='action' value='checkout'>";
+        echo "<button type='submit' class='btn btn-success'>Checkout</button>";
+        echo "</form>";
+    } else {
+        echo "<p class='text-center'>Your cart is empty.</p>";
+    }
+    ?>
+</div>
 </body>
 </html>
