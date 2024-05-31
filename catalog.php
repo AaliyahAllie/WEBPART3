@@ -20,6 +20,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // Add to Shop button click event
+        $(".add-to-shop-button").click(function(){
+            var item_id = $(this).data('itemid');
+            $.ajax({
+                url: 'add_to_shop.php',
+                type: 'post',
+                data: {item_id: item_id},
+                success: function(response){
+                    // Handle success response
+                    alert('Item added to shop!');
+                },
+                error: function(xhr, status, error){
+                    // Handle error response
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        // Remove from Shop button click event
+        $(".remove-from-shop-button").click(function(){
+            var item_id = $(this).data('itemid');
+            $.ajax({
+                url: 'remove_from_shop.php',
+                type: 'post',
+                data: {item_id: item_id},
+                success: function(response){
+                    // Handle success response
+                    alert('Item removed from shop!');
+                },
+                error: function(xhr, status, error){
+                    // Handle error response
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
 
     <style>
         .item-image {
