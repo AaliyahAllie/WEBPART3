@@ -1,4 +1,3 @@
-``php
 <?php
 session_start();
 
@@ -22,7 +21,7 @@ if (!isset($_SESSION['shop_items']) || empty($_SESSION['shop_items'])) {
 
     // Fetch items from the database based on the item IDs stored in the session
     $shop_items = implode(',', $_SESSION['shop_items']);
-    $sql = "SELECT * FROM tblClothes WHERE id IN ($shop_items)";
+    $sql = "SELECT * FROM userClothes WHERE id IN ($shop_items)";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -36,7 +35,10 @@ if (!isset($_SESSION['shop_items']) || empty($_SESSION['shop_items'])) {
             echo "<td>" . $row['itemDescription'] . "</td>";
             echo "<td>" . $row['itemSize'] . "</td>";
             echo "<td>$" . $row['itemPrice'] . "</td>";
-            echo "<td><button class='remove-from-shop-button' data-itemid='" . $row['id'] . "'>Remove from Shop</button></td>";
+            echo "<td>";
+            echo "<button class='remove-from-shop-button' data-itemid='" . $row['id'] . "'>Remove from Shop</button>";
+            echo "<button class='add-to-cart-button' data-itemid='" . $row['id'] . "'>Add to Cart</button>";
+            echo "</td>";
             echo "</tr>";
         }
         echo "</table>";
@@ -47,4 +49,3 @@ if (!isset($_SESSION['shop_items']) || empty($_SESSION['shop_items'])) {
     $conn->close();
 }
 ?>
-```

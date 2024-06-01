@@ -3,7 +3,8 @@
 // Database configuration
 $servername = "localhost"; // Server name
 $username = "AaliyahNicol"; // Username
-$password = ""; // Password
+$password = "AaliyahNicol"; // Password
+
 
 // Creates connection to MySQL server
 $conn = new mysqli($servername, $username, $password);

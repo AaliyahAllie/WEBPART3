@@ -22,44 +22,47 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function(){
-        // Add to Shop button click event
-        $(".add-to-shop-button").click(function(){
-            var item_id = $(this).data('itemid');
-            $.ajax({
-                url: 'add_to_shop.php',
-                type: 'post',
-                data: {item_id: item_id},
-                success: function(response){
-                    // Handle success response
-                    alert('Item added to shop!');
-                },
-                error: function(xhr, status, error){
-                    // Handle error response
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
-        // Remove from Shop button click event
-        $(".remove-from-shop-button").click(function(){
-            var item_id = $(this).data('itemid');
-            $.ajax({
-                url: 'remove_from_shop.php',
-                type: 'post',
-                data: {item_id: item_id},
-                success: function(response){
-                    // Handle success response
-                    alert('Item removed from shop!');
-                },
-                error: function(xhr, status, error){
-                    // Handle error response
-                    console.error(xhr.responseText);
-                }
-            });
+$(document).ready(function(){
+    // Add to Shop button click event for user clothes
+    $(".add-to-shop-button").click(function(){
+        var item_id = $(this).data('itemid');
+        var table_name = $(this).data('tablename'); // Get the table name
+        $.ajax({
+            url: 'add_to_shop.php', // Adjust the URL accordingly
+            type: 'post',
+            data: {item_id: item_id, table_name: table_name}, // Send the table name along with item_id
+            success: function(response){
+                // Handle success response
+                alert('Item added to shop!');
+            },
+            error: function(xhr, status, error){
+                // Handle error response
+                console.error(xhr.responseText);
+            }
         });
     });
+});
+
+    // Remove from Shop button click event
+    $(".remove-from-shop-button").click(function(){
+        var item_id = $(this).data('itemid');
+        $.ajax({
+            url: 'remove_from_shop.php',
+            type: 'post',
+            data: {item_id: item_id},
+            success: function(response){
+                // Handle success response
+                alert('Item removed from shop!');
+            },
+            error: function(xhr, status, error){
+                // Handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
 </script>
+
 
 
 
@@ -273,7 +276,10 @@
                         
                         <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
                         <!-- Inside the while loop for displaying items -->
-<button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "'>Add to Shop</button>
+
+<button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "' data-tablename='tblClothes'>Add to Shop</button>
+
+
 <!-- Add remove from shop button -->
 <form method='post' style='display:inline-block'>
     <input type='hidden' name='action' value='remove'>
@@ -330,8 +336,9 @@
                                             <input type='file' name='itemImage' class='form-control-file' accept='image/*'>
                                             <img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'>
                                             <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
-                                            <!-- Inside the while loop for displaying items -->
-                                            <button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "'>Add to Shop</button>
+
+                                            <button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "' data-tablename='userClothes'>Add to Shop</button>
+
                                             <!-- Add remove from shop button -->
                                             <form method='post' style='display:inline-block'>
                                                 <input type='hidden' name='action' value='remove'>
@@ -344,7 +351,14 @@
                         } else {
                             echo "<tr><td colspan='6'>0 results</td></tr>";
                         }
-                        
                         echo "</tbody>";
                         echo "</table>"; // End the table
+                        echo"</tbody>";
+                        echo"</table>";
+                    echo"</div>";
+                    echo"<!-- End of container -->";
+                    echo"</body>";
+                    echo"</html>";
+                    
+                    
                         

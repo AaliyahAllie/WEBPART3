@@ -1,23 +1,36 @@
 <?php
+// Database connection
+$servername = "localhost";
+$username = "AaliyahNicol"; // Replace with your MySQL username
+$password = "AaliyahNicol"; // Replace with your MySQL password
+$database = "ClothingStore"; // Replace with your database name
 
-$conn = new mysqli("localhost", "AaliyahNicol", "AaliyahNicol", "clothes_shop");
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accept'])) {
+// Process form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $request_id = $_POST['request_id'];
-    $stmt = $conn->prepare("UPDATE requests SET request_status='accepted' WHERE id=?");
-    $stmt->bind_param("i", $request_id);
-    $stmt->execute();
-    $stmt->close();
-
-    header("Location: adminHomePage.php");
-    exit();
+    $action = $_POST['action'];
+    
+    // Update request status
+    $sql_update = "UPDATE tblRequests SET verified = $action WHERE id = $request_id";
+    if ($conn->query($sql_update) === TRUE) {
+        echo "Request updated successfully.";
+    } else {
+        echo "Error updating request: " . $conn->error;
+    }
 }
 
-$result = $conn->query("SELECT * FROM requests WHERE request_status='pending'");
+// Fetch data from the database
+$sql_select = "SELECT * FROM tblRequests";
+$result = $conn->query($sql_select);
+
 ?>
 
 <!DOCTYPE html>
@@ -26,18 +39,39 @@ $result = $conn->query("SELECT * FROM requests WHERE request_status='pending'");
     <title>Admin Accept</title>
 </head>
 <body>
-    <h1>Pending Requests</h1>
-    <form method="POST" action="adminAccept.php">
-        <ul>
-            <?php while($row = $result->fetch_assoc()): ?>
-                <li>
-                    User ID: <?php echo $row['user_id']; ?>
-                    <button type="submit" name="accept" value="Accept">Accept</button>
-                    <input type="hidden" name="request_id" value="<?php echo $row['id']; ?>">
-                </li>
-            <?php endwhile; ?>
-        </ul>
-    </form>
+    <h2>Requests</h2>
+    <table border="1">
+        <tr>
+            <th>Email</th>
+            <th>Verified</th>
+            <th>Action</th>
+        </tr>
+        <?php
+        if ($result !== false && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                ?>
+                <tr>
+                    <td><?php echo $row["email"]; ?></td>
+                    <td><?php echo $row["verified"]; ?></td>
+                    <td>
+                        <form action="" method="post">
+                            <input type="hidden" name="request_id" value="<?php echo $row["id"]; ?>">
+                            <button type="submit" name="action" value="1">Accept</button>
+                            <button type="submit" name="action" value="0">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php
+            }
+        } else {
+            echo "<tr><td colspan='3'>No requests found</td></tr>";
+        }
+        ?>
+    </table>
 </body>
 </html>
-<?php $conn->close(); ?>
+
+<?php
+// Close connection
+$conn->close();
+?>

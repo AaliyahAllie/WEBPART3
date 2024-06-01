@@ -48,3 +48,4 @@ function removeCartItem(event) {
     // Removing the parent element of the clicked button, which is the item to be removed from the cart
     buttonClicked.parentElement.remove();
 }
+

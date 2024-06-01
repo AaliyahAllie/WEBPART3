@@ -3,65 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-    <!--title=================================================-->
     <title>Past'd Times</title>
-
-    <!--stylesheet============================================-->
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
-
-    <!--fav-icon===============================================-->
     <link rel="shortcut icon" href=""/>
-    <!--this is the tab icon^^^^-->
-
-    <!--using-FontAwesome======================================-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!--Import-Poppins-Font-Family=============================-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-
-    <!-- Add jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <!-- Add custom JavaScript -->
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             // When AddToCart is clicked
-            $('.add-to-cart').click(function(){
-                // Get the SellPrice of the product
-                var sellPrice = $(this).closest('.feature-product-box').find('.product-feature-text span').text();
+            $('.add-to-cart').click(function(event) {
+                event.preventDefault();
+                
+                // Get product details
+                var productBox = $(this).closest('.feature-product-box');
+                var productName = productBox.find('.product-feature-text strong').text();
+                var productPrice = productBox.find('.product-feature-text span').text().replace('R', '');
+                var productImage = productBox.find('.product-feature-img img').attr('src');
+                
                 // Show SellPrice in a popup
-                alert("Sell Price: " + sellPrice);
+                alert("Sell Price: R" + productPrice);
+                
+                // Add product to localStorage
+                var cart = JSON.parse(localStorage.getItem('cart')) || [];
+                var product = {
+                    name: productName,
+                    price: parseFloat(productPrice),
+                    image: productImage,
+                    quantity: 1
+                };
+                cart.push(product);
+                localStorage.setItem('cart', JSON.stringify(cart));
             });
         });
     </script>
-    
-
 </head>
 <body>
-
-<?php
-// Including the database connection file
-include 'DBConn.php';
-
-// Query to select all records from the 'tblitem' table
-$query = "SELECT * FROM tblclothes";
-
-// Executing the query and storing the result
-$result = mysqli_query($conn, $query);
-
-// Checking if there are any rows returned from the query
-if ($result->num_rows > 0) {
-
-
-}
-?>
-
     <!--navigatio-bar==========================================-->
     <nav class="navigation">
-
         <!--logo----->
         <a href="#" class="logo">past'd times</a>
         
@@ -107,13 +88,8 @@ if ($result->num_rows > 0) {
         </div>
     </nav>
 
-
-    <!--Navigation end------->
-
-
     <!--Banner==============================================================-->
     <section id="banner">
-
         <!--text------->
         <div class="banner-text">
             <strong>Beautiful Shoes</strong>
@@ -121,15 +97,12 @@ if ($result->num_rows > 0) {
             <p>Long Lasting And Comfortable</p>
             <a href="#">Shop Now</a>
         </div>
-
         <!--img-------->
         <div class="banner-img">
             <img src="image\b-1.png" alt="Banner">
         </div>
-
     </section>
 
-    <!--banner end------------------------------>
 
 
 
