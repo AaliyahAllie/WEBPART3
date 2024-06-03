@@ -1,3 +1,4 @@
+<!--this page allows users to go to whatever admin or user they are (goes to login) SECOND PAGE OF THE PROGRAM-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +46,9 @@
     <div class="container">
         <h1>Welcome to Past'd Times</h1>
         <p>ARE YOU AN ADMIN OR  A USER?</p>
+        <!--REDIRECTS TO ADMIN LOGIN PAGE-->
         <a href="adminLogin.php" class="btn">ADMIN</a>
+        <!--REDIRECTS TO USER LOGIN PAGE-->
         <a href="userLogin.php" class="btn">USER</a>
     </div>
 </body>

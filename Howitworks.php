@@ -1,3 +1,4 @@
+<!--explains to users how the business works-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +100,7 @@
 <br>
 <br>
 <br>
-
+<!--explaination of how business workss-->
 
 <div class="container">
     <h1>How It Works</h1>

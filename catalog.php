@@ -1,3 +1,4 @@
+<!--tHIS PAGE LETS THE ADMIN ADD,DELETE OR EDIT ITEMS IN THE tblClothes and userClothes table in the database and add or remove it from the shop-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -145,7 +146,7 @@ $(document).ready(function(){
 <br><br><br><br><br>
 <div class="container mt-5">
     <h1 class="text-center">Clothing Catalog</h1>
-
+    <!--Allows the display for adding products-->
     <div class="form-container">
         <h2>Add New Product</h2>
         <form method="post" enctype="multipart/form-data" action="">
@@ -168,10 +169,11 @@ $(document).ready(function(){
             <button type="submit" class="btn btn-primary">Add Product</button>
             </form>
     </div>
-
+        <!--Allows the display for the products stored in the datbase-->
     <h2 class="text-center">Items in tblClothes</h2>
     <table class="table table-striped table-bordered mt-4">
         <thead class="thead-dark">
+            <!--displays the data in the database as table-->
             <tr>
                 <th>Image</th>
                 <th>Name</th>
@@ -183,7 +185,7 @@ $(document).ready(function(){
         </thead>
         <tbody>
         <?php
-
+        //connects to database
         $servername = "localhost";
         $username = "AaliyahNicol";
         $password= "AaliyahNicol";
@@ -196,7 +198,7 @@ $(document).ready(function(){
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-
+        //displays the data stored the database and adds it
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['action'])) {
                 $action = $_POST['action'];
@@ -243,7 +245,7 @@ $(document).ready(function(){
 
         $sql = "SELECT * FROM tblClothes";
         $result = $conn->query($sql);
-
+        //shows the data stored in the tblClothes in a tabular format
         if ($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
@@ -272,7 +274,7 @@ $(document).ready(function(){
                         
                         <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
                         <!-- Inside the while loop for displaying items -->
-
+<!--displays the add button so that item can be added to shop-->
 <button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "' data-tablename='tblClothes'>Add to Shop</button>
 
 
@@ -280,6 +282,7 @@ $(document).ready(function(){
 <form method='post' style='display:inline-block' action='remove_from_shop.php'>
     <input type='hidden' name='action' value='remove'>
     <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+    <!--removes item from the shop-->
     <button type='submit' class='remove-from-shop-button btn btn-danger mt-2'>Remove from Shop</button>
 </form>
                         </td>";
@@ -309,6 +312,7 @@ $(document).ready(function(){
         // Fetch data from the userClothes table
         $sql = "SELECT * FROM userClothes";
     $result = $conn->query($sql);
+    //displays everything stored on userClothes table in the database
     if ($result->num_rows > 0) {
         // Output data of each row
         while($row = $result->fetch_assoc()) {

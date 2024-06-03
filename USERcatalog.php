@@ -1,3 +1,4 @@
+<!--shows users all the items that they have added also allows them to add more or edit or delete items-->
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1,3 +1,4 @@
+<!--main page for user interface, home page with connections to other pages and purchases-->
 <!DOCTYPE html>
 <html lang="en">
 <head>

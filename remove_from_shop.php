@@ -1,3 +1,4 @@
+<!--RETRIVAL FOR CATALOG.PHP TO DELETE ITEMS FROM THE SHOP PAGE-->
 <?php
 // remove_from_shop.php
 

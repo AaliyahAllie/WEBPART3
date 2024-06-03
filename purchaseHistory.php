@@ -1,8 +1,9 @@
+<!--PULL ORDERS FROM ORDER TABLE AND DISPLAYS IT-->
 <?php
 session_start();
 
 // customer ID stored in the session
-$customerId = 1; // Replace with actual retrieval of customerId from session
+$customerId = 1; 
 
 // Database connection
 $db_host = 'localhost';
@@ -112,6 +113,7 @@ $conn->close();
         </div>
     </header>
 <br>
+<!--DISPLAYS ORDERS IN TABULAR FORM-->
     <div class="container">
         <section id="purchase-history">
             <?php if (!empty($orders)): ?>

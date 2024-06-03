@@ -1,9 +1,11 @@
+<!--ALLOWS USERS TO MAKE A REQUEST TO SELL CLOTHES BY HAVING ADMIN ACCEPT IT-->
 <?php
+
 // Database connection
 $servername = "localhost";
-$username = "AaliyahNicol"; // Replace with your MySQL username
-$password = "AaliyahNicol"; // Replace with your MySQL password
-$database = "ClothingStore"; // Replace with your database name
+$username = "AaliyahNicol"; 
+$password = "AaliyahNicol"; 
+$database = "ClothingStore"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
@@ -117,13 +119,14 @@ if ($email_verified == 1) {
     </style>
 </head>
 <body>
+    <!--INTERFACE FOR MAKING REQUEST TO SELL-->
     <div class="container">
         <h2>Enter your email to verify:</h2>
         <p><?php echo $email_message; ?></p>
-        <form action="" method="post"> <!-- Changed action to empty -->
+        <form action="" method="post"> 
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
-            <input type="submit" value="Verify">
+            <input type="submit" value="SEND REQUEST">
         </form>
     </div>
 </body>

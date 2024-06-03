@@ -100,6 +100,7 @@
             <tr>
                 <td colspan="2">
                     <form method="POST" action="Add,Delete,Updateuser.php">
+                        <!-- redirects to user controls where admin can add or delete or update users-->
                         <button type="submit" class="btn btn-primary">User Controls</button>
                     </form>
                 </td>
@@ -107,25 +108,30 @@
             <tr>
                 <td>
                     <h4>To add, delete, or edit items, click the button</h4>
+                    <!-- redirects to item controls where admin can add, delete or edit clothing catalog and add it to shop-->
                     <a href="catalog.php"><button type="submit" class="btn btn-primary">Item Controls</button></a>
                 </td>
                 <td>
                     <h4>To view orders, click the button</h4>
+                    <!-- redirects to order line which shows the admin a history of purchases-->
                     <a href="orderLine.php"><button type="submit" class="btn btn-primary">Order Line</button></a>
                 </td>
             </tr>
             <tr>
                 <td>
                     <h4>To message sellers, click the button</h4>
+                    <!-- redirects to message where admin can contact seller-->
                     <a href="message.php"><button type="submit" class="btn btn-primary">Message Seller</button></a>
                 </td>
                 <td>
                     <h4>To verify users, click the button</h4>
+                    <!--Allows admin to verify user accounts when they want to login-->
                     <a href="verifyUserRequests.php"><button type="submit" class="btn btn-primary">Verify</button></a>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
+                <!--Allows admin to verify user sell requests when they want to sell items-->
                     <h4>To verify user sell requests, click the button</h4>
                     <a href="adminAccept.php"><button type="submit" class="btn btn-primary">Sell Requests</button></a>
                 </td>

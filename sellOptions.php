@@ -1,3 +1,4 @@
+<!--displays the options that the user has after they are approved to sell items-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,9 +79,11 @@
     <h3>Please choose an option:</h3>
 </div>
         <h4>Would you like to sell an item?</h4>
+        <!--redirects so users can add items to their catalog-->
         <a href="sell.php"><button type="submit" class="btn btn-primary">Sell Clothes </button></a>
          
         <h4>Would you like to view the items you have for sale?</h4>
+        <!--shows users catalog-->
          <a href="USERcatalog.php"><button type="submit" class="btn btn-primary">Catalog</button></a>
          
          

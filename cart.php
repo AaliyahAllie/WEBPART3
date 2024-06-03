@@ -1,7 +1,8 @@
+<!--Allows users to make purchases based on the items in their cart-->
 <?php
 // Check if the request is coming from AJAX
 if (isset($_POST['placeOrder'])) {
-    // Assuming you have a database connection already established
+    // database connection already established
     $db_host = 'localhost';
     $db_user = 'AaliyahNicol';
     $db_pass = 'AaliyahNicol';
@@ -15,7 +16,7 @@ if (isset($_POST['placeOrder'])) {
     }
 
     // Process the order and insert into the database
-    // Assuming you have a table named 'tblorders' with columns 'orderId', 'customerId', 'orderDate', 'shippingAddress', 'receipt'
+    
     $shippingAddress = $_POST['shippingAddress'];
     $totalPrice = $_POST['totalPrice'];
     $customerId = 1; // Retrieve this from session or other means
@@ -23,7 +24,7 @@ if (isset($_POST['placeOrder'])) {
 
     // Retrieve items from the session or wherever you're storing them
     session_start(); // Start session if not already started
-    $items = json_encode($_SESSION['cart']); // Assuming you're storing the cart items in the session
+    $items = json_encode($_SESSION['cart']); // storing the cart items in the session
 
     // Generate receipt content
     $receipt = '';

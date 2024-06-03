@@ -50,7 +50,7 @@
             var size = document.getElementById("size").value;
             var style = document.getElementById("style").value;
             
-            // Here you can implement the logic to store the alert criteria or send it to a server
+            // to store the alert criteria or send it to a server
             // For demonstration purposes, let's just log the criteria
             console.log("Alert set for brand: " + brand + ", size: " + size + ", style: " + style);
             

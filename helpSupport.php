@@ -1,3 +1,4 @@
+<!--displays businesses FAQs and displays a form for users to raise their concerns-->
 <?php
 // Database configuration
 $servername = "localhost";
@@ -126,6 +127,7 @@ $conn->close();
     <div class="container">
         <div class="main">
             <section id="faq" class="faq">
+                <!--FAQs of the business-->
                 <h2>Frequently Asked Questions</h2>
                 <div>
                     <h3>How do I register to sell items?</h3>
@@ -140,7 +142,7 @@ $conn->close();
                     <p>The user manual can be downloaded from our website's 'About Us' section, under "How it Works"</p>
                 </div>
             </section>
-
+        <!--form for users to send business a message about their concerns-->
             <section id="contact" class="contact-form">
                 <h2>Contact Us</h2>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">

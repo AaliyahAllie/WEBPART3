@@ -1,3 +1,4 @@
+<!--Allows user to chat to admin-->
 <?php
 session_start();
 

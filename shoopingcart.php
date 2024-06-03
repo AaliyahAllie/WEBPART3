@@ -1,3 +1,4 @@
+<!--method that cart.php makes use of-->
 <?php
 // Start session
 session_start();

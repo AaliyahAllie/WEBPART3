@@ -1,3 +1,4 @@
+<!--this is the shop page that displays item from catalog.php that has been added to the shop-->
 <?php
 session_start();
 
@@ -147,6 +148,7 @@ $(document).ready(function() {
         <?php
         if ($result->num_rows > 0) {
             // Output data of each row
+            //displays the outputs that where fetched from the catalog.php
             while($row = $result->fetch_assoc()) {
                 $imageData = base64_encode($row['Image']);
                 $itemName = $row['itemName'];

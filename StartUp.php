@@ -1,3 +1,4 @@
+<!--first page of website should open on start up-->
 <!DOCTYPE html>
 <html lang="en">
 <head>

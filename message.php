@@ -1,3 +1,4 @@
+<!--INTERFACE FOR USERS TO MESSAGE EACH OTHER ADMIN-USER-->
 <?php
 session_start();
 
