@@ -1,9 +1,10 @@
+<!--this page allows admin to accept a users request to sell products-->
 <?php
 // Database connection
-$servername = "localhost";
-$username = "AaliyahNicol"; // Replace with your MySQL username
-$password = "AaliyahNicol"; // Replace with your MySQL password
-$database = "ClothingStore"; // Replace with your database name
+$servername = "localhost";//servername connection
+$username = "AaliyahNicol"; //username connection
+$password = "AaliyahNicol"; //password connection
+$database = "ClothingStore"; //  database name cinnection
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
@@ -40,23 +41,30 @@ $result = $conn->query($sql_select);
 </head>
 <body>
     <h2>Requests</h2>
+    <!--table layout-->
     <table border="1">
         <tr>
+            <!--table headings-->
             <th>Email</th>
             <th>Verified</th>
             <th>Action</th>
         </tr>
+        <!--fetches results from tabele for admin to accept or reject-->
         <?php
         if ($result !== false && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 ?>
                 <tr>
+                    <!--fetches the data and displays it-->
                     <td><?php echo $row["email"]; ?></td>
                     <td><?php echo $row["verified"]; ?></td>
                     <td>
                         <form action="" method="post">
+                            <!--displays request information stored and accepts or denies and updates in table-->
                             <input type="hidden" name="request_id" value="<?php echo $row["id"]; ?>">
+                            <!--allows admin to accept request-->
                             <button type="submit" name="action" value="1">Accept</button>
+                            <!--allows admin to reject request-->
                             <button type="submit" name="action" value="0">Reject</button>
                         </form>
                     </td>

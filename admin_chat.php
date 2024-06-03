@@ -1,3 +1,4 @@
+<!--this page will allow admin to contact sellers-->
 <?php
 session_start();
 
