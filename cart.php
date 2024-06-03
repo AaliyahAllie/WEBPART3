@@ -1,4 +1,3 @@
-
 <?php
 // Check if the request is coming from AJAX
 if (isset($_POST['placeOrder'])) {
@@ -16,22 +15,33 @@ if (isset($_POST['placeOrder'])) {
     }
 
     // Process the order and insert into the database
-    // Assuming you have a table named 'orders' with columns 'id', 'shipping_address', 'total_price', 'items' in the database
+    // Assuming you have a table named 'tblorders' with columns 'orderId', 'customerId', 'orderDate', 'shippingAddress', 'receipt'
     $shippingAddress = $_POST['shippingAddress'];
-    $totalPrice = $_POST['totalPrice']; // Assuming you're sending the total price from the frontend
+    $totalPrice = $_POST['totalPrice'];
+    $customerId = 1; // Retrieve this from session or other means
+    $orderDate = date("Y-m-d H:i:s");
 
     // Retrieve items from the session or wherever you're storing them
     session_start(); // Start session if not already started
     $items = json_encode($_SESSION['cart']); // Assuming you're storing the cart items in the session
 
+    // Generate receipt content
+    $receipt = '';
+    $cartItems = json_decode($items, true);
+    foreach ($cartItems as $item) {
+        $itemTotal = $item['price'] * $item['quantity'];
+        $receipt .= "{$item['name']} - Quantity: {$item['quantity']} - Price: R{$item['price']} - Total: R{$itemTotal}\n";
+    }
+    $receipt .= "Total Price: R{$totalPrice}";
+
     // Prepare and execute the SQL statement
-    $stmt = $conn->prepare("INSERT INTO orders (shipping_address, total_price, items) VALUES (?, ?, ?)");
-    $stmt->bind_param("sds", $shippingAddress, $totalPrice, $items);
+    $stmt = $conn->prepare("INSERT INTO tblorders (customerId, orderDate, shippingAddress, receipt) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("isss", $customerId, $orderDate, $shippingAddress, $receipt);
     $stmt->execute();
 
     // Check for successful insertion
     if ($stmt->affected_rows > 0) {
-        $response = array('success' => true, 'message' => 'Order placed successfully!');
+        $response = array('success' => true, 'message' => 'Order placed successfully!', 'orderId' => $stmt->insert_id);
     } else {
         $response = array('success' => false, 'message' => 'Failed to place order.');
     }
@@ -59,86 +69,146 @@ if (isset($_POST['placeOrder'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
     <script>
-    $(document).ready(function() {
-        // Function to update the cart display
-        function updateCart() {
-            var cart = JSON.parse(localStorage.getItem('cart')) || [];
-            var cartContent = $('.cart-content');
-            cartContent.empty();
-            var total = 0;
+$(document).ready(function() {
+    // Function to update the cart display
+    function updateCart() {
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        var cartContent = $('#cart');
+        cartContent.empty();
+        var total = 0;
 
-            cart.forEach(function(item, index) {
-                var itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                cartContent.append(`
-                    <div class="cart-box">
-                        <img src="${item.image}" alt="" class="cart-img">
-                        <div class="detail-box">
-                            <div class="cart-product-title">${item.name}</div>
-                            <div class="cart-price">R${item.price.toFixed(2)}</div>
-                            <input type="number" value="${item.quantity}" class="cart-quantity" data-index="${index}">
-                        </div>
-                        <i class="fa-solid fa-trash" data-index="${index}"></i>
+        cart.forEach(function(item, index) {
+            var itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            cartContent.append(`
+                <article class="product" data-index="${index}">
+                    <header>
+                        <a class="remove">
+                            <img src="${item.image}" alt="">
+                            <h3>Remove product</h3>
+                        </a>
+                    </header>
+                    <div class="content">
+                        <h1>${item.name}</h1>                        
                     </div>
-                `);
-            });
+                    <footer class="content">
+                        <span class="qt-minus">-</span>
+                        <span class="qt" data-index="${index}">${item.quantity}</span>
+                        <span class="qt-plus">+</span>
+                        <h2 class="price">R ${item.price.toFixed(2)}</h2>
+                        <h2 class="full-price">R ${itemTotal.toFixed(2)}</h2>
+                        <button class="delete-item">Delete</button>
+                    </footer>
+                </article>
+            `);
+        });
 
-            $('.total-price').text('R' + total.toFixed(2));
+        $('.receipt-total-price').text('R' + total.toFixed(2));
+    }
+
+    // Show Receipt and Save Shipping Address in Session
+    $('#btn-show-receipt').on('click', function() {
+        const shippingAddress = $('#shippingAddress').val();
+        if (shippingAddress.trim() === "") {
+            alert("Shipping address is required.");
+            return;
         }
 
-        // Place Order Button
-        $('#btn-place-order').on('click', function() {
-            // Extracting shipping address
-            var shippingAddress = $('#shippingAddress').val();
-            if (shippingAddress.trim() === "") {
-                alert("Shipping address is required.");
-                return;
+        // Save the shipping address to the session or perform any other necessary action
+        $.ajax({
+            type: "POST",
+            url: "cart.php",
+            data: { saveAddress: true, shippingAddress: shippingAddress },
+            success: function(response) {
+                const receiptItems = [];
+                $('.product').each(function() {
+                    const title = $(this).find('h1').text();
+                    const price = parseFloat($(this).find('.price').text().replace('R', ''));
+                    const quantity = parseInt($(this).find('.qt').text());
+                    const totalItemPrice = price * quantity;
+                    receiptItems.push({ title, price, quantity, totalItemPrice });
+                });
+
+                let receiptContent = '';
+                receiptItems.forEach(item => {
+                    receiptContent += `<p>${item.title} - Quantity: ${item.quantity} - Price: R${item.price.toFixed(2)} - Total: R${item.totalItemPrice.toFixed(2)}</p>`;
+                });
+
+                $('.receipt-items').html(receiptContent);
+                $('.receipt-total-price').text($('.receipt-total-price').text());
+
+                // Show receipt modal
+                $('#receipt-modal').css('display', 'block');
             }
-
-            // Sending data to process_order.php
-            $.ajax({
-                type: "POST",
-                url: "process_order.php",
-                data: {
-                    placeOrder: true,
-                    shippingAddress: shippingAddress,
-                    totalPrice: parseFloat($('.total-price').text().replace('R', '').replace(',', ''))
-                },
-                success: function(response) {
-                    const result = JSON.parse(response);
-                    if (result.success) {
-                        // Show the receipt modal
-                        $('#receipt-modal').css('display', 'block');
-                        // You can clear the cart here or perform any other action
-                    } else {
-                        alert(result.message);
-                    }
-                }
-            });
-        });
-
-        // Initial cart update
-        updateCart();
-
-        // Update quantity
-        $(document).on('change', '.cart-quantity', function() {
-            var index = $(this).data('index');
-            var cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart[index].quantity = $(this).val();
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCart();
-        });
-
-        // Remove item from cart
-        $(document).on('click', '.fa-trash', function() {
-            var index = $(this).data('index');
-            var cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCart();
         });
     });
+
+    // Update quantity
+    $(document).on('click', '.qt-minus', function() {
+        var index = $(this).siblings('.qt').data('index');
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart[index].quantity > 1) {
+            cart[index].quantity--;
+            localStorage.setItem
+            ('cart', JSON.stringify(cart));
+            updateCart();
+        }
+    });
+
+    $(document).on('click', '.qt-plus', function() {
+        var index = $(this).siblings('.qt').data('index');
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart[index].quantity++;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+    });
+
+    // Delete item
+    
+    $(document).on('click', '.delete-item', function() {
+        var index = $(this).closest('.product').data('index');
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+    });
+
+    // Initial cart update
+    updateCart();
+
+    // Close Receipt Button
+    $('.btn-close-receipt, .close-receipt').on('click', function() {
+        const shippingAddress = $('#shippingAddress').val();
+        const totalPrice = parseFloat($('.receipt-total-price').text().replace('R', ''));
+
+        // Place order and send data to the server
+        $.ajax({
+            type: "POST",
+            url: "cart.php",
+            data: { placeOrder: true, shippingAddress: shippingAddress, totalPrice: totalPrice },
+            success: function(response) {
+                response = JSON.parse(response);
+                if (response.success) {
+                    // Redirect to the purchase history page with orderId
+                    window.location.href = 'purchaseHistory.php?orderId=' + response.orderId;
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+
+        $('#receipt-modal').css('display', 'none');
+    });
+
+    // Close the modal if clicked outside of receipt content
+    $(window).on('click', function(event) {
+        if ($(event.target).is('#receipt-modal')) {
+            $('#receipt-modal').css('display', 'none');
+        }
+    });
+});
 </script>
 
 </head>
@@ -154,7 +224,7 @@ if (isset($_POST['placeOrder'])) {
         </ul>
         <div class="right-elements">
             <a href="#" class="search"><i class="fa-solid fa-magnifying-glass"></i></a>
-            <a href="cart.php" class="cart"><i class="fas fa-shopping-bag"></i></a>
+            <a href="cart.php" class="active" class="cart"><i class="fas fa-shopping-bag"></i></a>
             <a href="favourites.php" class="favourites"><i class="fa fa-heart" aria-hidden="true"></i></a>
             <div class="dropdown">
                 <button class="dropbtn">
@@ -172,108 +242,40 @@ if (isset($_POST['placeOrder'])) {
             </div>
         </div>
     </nav>
-
+<br><br><br><br>
     <!-- Cart Page Content -->
-    <h2 class="cart-tile">Your Cart</h2>
-    <div class="cart-content"></div>
-    <div class="total">
-        <div class="total-tile">Total</div>
-        <div class="total-price">R0.00</div>
-    </div>
-    
+    <header id="site-header">
+        <div class="container">
+            <h1>Shopping cart </h1>
+        </div>
+    </header>
 
-    <!-- Shipping Address Form -->
-    <form id="shipping-form">
-        <label for="shippingAddress">Shipping Address:</label>
-        <input type="text" id="shippingAddress" name="shippingAddress" required>
-        <button type="button" id="btn-show-receipt" class="btn-buy">Check-Out</button>
-    </form>
-    <button type="button" class="btn-continue">Continue Shopping</button>
+    <div class="container">
 
-    <!-- Receipt Modal -->
-    <div id="receipt-modal" class="receipt-modal">
-        <div class="receipt-content">
-            <span class="close-receipt">&times;</span>
-            <h2>Receipt</h2>
-            <div class="receipt-items"></div>
-            <div class="receipt-total">
-                <strong>Total: </strong><span class="receipt-total-price">R0.00</span>
+        <section id="cart">
+            <!-- Product articles will be dynamically added here -->
+        </section>
+
+        <form id="shipping-form">
+            <label for="shippingAddress">Shipping Address:</label>
+            <input type="text" id="shippingAddress" name="shippingAddress" required>
+            <button type="button" id="btn-show-receipt" class="btn-buy">Check Out</button>
+        </form>
+        <button type="button" class="btn-continue"><a href="products.php">Continue Shopping</a></button>
+
+        <!-- Receipt Modal -->
+        <div id="receipt-modal" class="receipt-modal">
+            <div class="receipt-content">
+                <span class="close-receipt">&times;</span>
+                <h2>Receipt</h2>
+                <div class="receipt-items"></div>
+                <div class="receipt-total">
+                    <strong>Total: </strong><span class="receipt-total-price">R0.00</span>
+                </div>
+                <button type="button" class="btn-close-receipt"><a href="userLogin.php">Close</a></button>
             </div>
-            <button type="button" id="btn-place-order" class="btn-close-receipt">Place Order</button>
         </div>
     </div>
-
-    <script>
-    // Continue Shopping Button
-    $('.btn-continue').on('click', function() {
-        window.location.href = 'products.php';
-    });
-
-    // Show Receipt and Save Shipping Address in Session
-    $('#btn-show-receipt').on('click', function() {
-                const shippingAddress = $('#shippingAddress').val();
-                if (shippingAddress.trim() === "") {
-                    alert("Shipping address is required.");
-                    return;
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: "cart.php",
-                    data: { saveAddress: true, shippingAddress: shippingAddress },
-                    success: function(response) {
-                        const receiptItems = [];
-                        $('.cart-box').each(function() {
-                            const title = $(this).find('.cart-product-title').text();
-                            const price = parseFloat($(this).find('.cart-price').text().replace('R', ''));
-                            const quantity = parseInt($(this).find('.cart-quantity').val());
-                            const totalItemPrice = price * quantity;
-                            receiptItems.push({ title, price, quantity, totalItemPrice });
-                        });
-
-                        let receiptContent = '';
-                        receiptItems.forEach(item => {
-                            receiptContent += `<p>${item.title} - Quantity: ${item.quantity} - Price: R${item.price.toFixed(2)} - Total: R${item.totalItemPrice.toFixed(2)}</p>`;
-                        });
-
-                        $('.receipt-items').html(receiptContent);
-                        $('.receipt-total-price').text($('.total-price').text());
-
-                        // Show receipt modal
-                        $('#receipt-modal').css('display', 'block');
-                    }
-                });
-            });
-
-            // Place Order Button
-            $('#btn-place-order').on('click', function() {
-                $.ajax({
-                    type: "POST",
-                    url: "cart.php",
-                    data: { placeOrder: true },
-                    success: function(response) {
-                        const result = JSON.parse(response);
-                        if (result.success) {
-                            alert(result.message);
-                            window.location.href = 'order-confirmation.php'; // Redirect to a confirmation page
-                        } else {
-                            alert(result.message);
-                        }
-                    }
-                });
-            });
-
-            // Close Receipt Button
-            $('.btn-close-receipt, .close-receipt').on('click', function() {
-                $('#receipt-modal').css('display', 'none');
-            });
-
-            // Close the modal if clicked outside of receipt content
-            $(window).on('click', function(event) {
-                if ($(event.target).is('#receipt-modal')) {
-                    $('#receipt-modal').css('display', 'none');
-                }
-            });
-</script>
+    
 </body>
 </html>

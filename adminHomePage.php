@@ -1,11 +1,9 @@
-<!--This page contains code to create the admin home page, the admin home page is what the admin sees upon login.
- The admin home page has only one option and that is to redirect to admin controls(add,delete,update users).-->
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login Page</title>
+    <title>Admin Home Page</title>
     <!-- Stylesheet -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!-- Bootstrap CSS Link -->
@@ -18,15 +16,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
     <style>
-        body{
-    margin: 0px;
-    padding: 0px;
-    font-family:poppins;
-    background-color: #add8e6;
-    text-align: center;
-    }
+        body {
+            margin: 0px;
+            padding: 0px;
+            font-family: poppins;
+            background-color: #add8e6;
+            text-align: center;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
     </style>
-</head> 
+</head>
 <body>
     <!-- Navigation Bar -->
     <nav class="navigation">
@@ -67,37 +85,52 @@
             </div>
         </div>    
     </nav>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-<!-- Main Content -->
-<div class="container">
-    <h2>Welcome Admin</h2>
-    <!-- Instructions for the action -->
-    <h3>Please choose an option:</h3>
-    <form method="POST" action="Add,Delete,Updateuser.php" class="mt-4">
-        <h4>To add a user, update, or delete a user, click the button.</h4>
-        <!-- when button is clicked it will redirect to the next page which is where admin controls will be found-->
-        <button type="submit" class="btn btn-primary">User Controls</button>
-        <br>
-    </form>
-</div>
-        <h4>To add,delete or edit items, click the button</h4>
-         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
-         <a href="catalog.php"><button type="submit" class="btn btn-primary">Item Controls</button></a>
-         <h4>To view orders, click the button</h4>
-         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
-         <a href="orderLine.php"><button type="submit" class="btn btn-primary">Order Line</button></a>
-         <h4>To view orders, click the button</h4>
-         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
-         <a href="message.php"><button type="submit" class="btn btn-primary">Message Seller</button></a>
-         <h4>Verfiy Users</h4>
-         <!-- when button is clicked it will redirect to the next page which is where admin controls the items/catalog will be found-->
-         <a href="verifyUserRequests.php"><button type="submit" class="btn btn-primary">Verfiy</button></a>
-         <br>
-         <a href="adminAccept.php"><button type="submit" class="btn btn-primary">Sell requests</button></a>
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Welcome Admin</h2>
+        <!-- Instructions for the action -->
+        <h3>Please choose an option:</h3>
+        <table>
+            <tr>
+                <td colspan="2">
+                    <form method="POST" action="Add,Delete,Updateuser.php">
+                        <button type="submit" class="btn btn-primary">User Controls</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>To add, delete, or edit items, click the button</h4>
+                    <a href="catalog.php"><button type="submit" class="btn btn-primary">Item Controls</button></a>
+                </td>
+                <td>
+                    <h4>To view orders, click the button</h4>
+                    <a href="orderLine.php"><button type="submit" class="btn btn-primary">Order Line</button></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>To message sellers, click the button</h4>
+                    <a href="message.php"><button type="submit" class="btn btn-primary">Message Seller</button></a>
+                </td>
+                <td>
+                    <h4>To verify users, click the button</h4>
+                    <a href="verifyUserRequests.php"><button type="submit" class="btn btn-primary">Verify</button></a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h4>To verify user sell requests, click the button</h4>
+                    <a href="adminAccept.php"><button type="submit" class="btn btn-primary">Sell Requests</button></a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

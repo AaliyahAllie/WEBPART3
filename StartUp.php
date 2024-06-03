@@ -48,7 +48,7 @@
         <p>At Past'd Times, we believe that every garment has a past and a future. Our curated collection of preloved clothing brings together the best of vintage charm and contemporary flair, offering you a unique shopping experience unlike any other.</p>
         <p>Whether you're a fashion-forward trendsetter or a vintage enthusiast, you'll find something special in our collection. From timeless classics to one-of-a-kind treasures, there's something for everyone at Past'd Times.</p>
         <p>Ready to start shopping and selling?</p>
-        <a href="index.php" class="btn">Start Shopping and Selling</a>
+        <a href="loading.php" class="btn">Start Shopping and Selling</a>
     </div>
 </body>
 </html>

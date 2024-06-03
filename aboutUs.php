@@ -1,3 +1,4 @@
+<!--This php file contains the code for the About Us Page, here users of the website can navigate and find out more about us as a business-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,21 +84,25 @@
             <div class="card">
                 <h2>Who we are</h2>
                 <p>We are a business aiming to help users sell and buy preloved clothes</p>
+                <!--redirects to who we are page that explains us as a business-->
                 <a href="whoWeAre.php"><button>let's go</button></a>
             </div>
             <div class="card">
                 <h2>How it works</h2>
                 <p>Click the button to find out how we achieve our goals</p>
+                <!--redirects to how the business works -->
                 <a href="Howitworks.php"><button>let's go</button></a>
             </div>
             <div class="card">
                 <h2>Our Ratings</h2>
                 <p>Click the button to find out more</p>
+                <!--redirects to our ratings by users-->
                 <a href="ourRates.php"><button>let's go</button></a>
             </div>
             <div class="card">
                 <h2>Help & Support</h2>
                 <p>Click the button to find out more</p>
+                <!--redirects to help and support where our FAQs are and lets users contact us-->
                 <a href="helpSupport.php"><button>let's go</button></a>
             </div>
         </div>

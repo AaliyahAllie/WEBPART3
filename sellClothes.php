@@ -62,14 +62,69 @@ if ($email_verified == 1) {
 <html>
 <head>
     <title>Email Verification</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin-bottom: 10px;
+        }
+        input[type="email"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        p {
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <h2>Enter your email to verify:</h2>
-    <p><?php echo $email_message; ?></p>
-    <form action="" method="post"> <!-- Changed action to empty -->
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <input type="submit" value="Verify">
-    </form>
+    <div class="container">
+        <h2>Enter your email to verify:</h2>
+        <p><?php echo $email_message; ?></p>
+        <form action="" method="post"> <!-- Changed action to empty -->
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <input type="submit" value="Verify">
+        </form>
+    </div>
 </body>
 </html>

@@ -1,4 +1,5 @@
- <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,17 +36,23 @@
             <li><a href="index.php">Home</a></li>
             <li><a href="categories.php">Shop</a></li>
             <li><a href="products.php">Products</a></li>
-            <li><a href="aboutUs.php" class="active">About Us</a></li>
+            <li><a href="aboutUs.php" >About Us</a></li>
         </ul>
-        <!-- Right Elements -->
+        <!--right----->
         <div class="right-elements">
-            <!-- Search -->
+            <!--search-->
             <a href="#" class="search">
-                <i class="fas fa-search"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
             </a>
-            <!-- Favourites -->
+
+             <!--cart-->
+             <a href="cart.php" class="cart">
+                <i class="fas fa-shopping-bag"></i>
+            </a>
+
+            <!--favourites-->
             <a href="favourites.php" class="favourites">
-                <i class="fas fa-heart"></i>
+            <i class="fa fa-heart" aria-hidden="true"></i>
             </a>
             <!-- Dropdown -->
             <div class="dropdown">
@@ -54,7 +61,7 @@
                     <i class="fas fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
-                    <a href="profile.php">Profile</a>
+                    <a href="profile.php"class="active">Profile</a>
                     <a href="adminRegister.php">Sign Up as Admin</a>
                     <a href="adminLogin.php">Login as Admin</a>
                     <a href="adminHomePage.php">Admin Controls</a>
@@ -73,20 +80,37 @@
     <br>
 <!-- Main Content -->
 <div class="container">
-    <h2>Welcome User</h2>
-    <!-- Instructions for the action -->
-    <h3>Please choose an option:</h3>
+<div class="card-component">
+    <div class="card-component-img">
+        <img src="https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg">
+    </div>
+    <div class="desc">
+    <?php
+                session_start();
+                if(isset($_SESSION['user_email'])) {
+                    echo "<h6 class='secondary-text'>" . $_SESSION['user_email'] . "</h6>";
+                } else {
+                    echo "<h6 class='secondary-text'>No user logged in</h6>";
+                }
+                ?>
+    </div>
+    <a href="logout.php">
+        <button class="logout-button">LOG OUT</button>
+    </a>
+    <div class="details">
+        <div class="request">
+            <a href="sellClothes.php">
+                <button type="submit" class="btn btn-primary">Send Request</button>
+            </a>
+        </div>
+        <div class="purchase-history">
+            <a href="purchaseHistory.php">
+                <button type="submit" class="btn btn-primary">Purchase History</button>
+            </a>
+        </div>
+    </div>
 </div>
-        <h4>To make a request to sell clothes press the button</h4>
+</div>
 
-         <a href="sellClothes.php"><button type="submit" class="btn btn-primary">Send Request</button></a>
-         <h4>To view your catalog press the button</h4>
-         
-         <a href="USERcatalog.php"><button type="submit" class="btn btn-primary">Catalog</button></a>
-         <h4>To view purchase history press the button below</h4>
-         <a href="purchaseHistory.php"><button type="submit" class="btn btn-primary">Purchase History</button></a>
-         <br>
-         <h4>To logout press the button below</h4>
-         <a href="logout.php"><button type="submit" class="logout-button">LOG OUT</button></a>
 </body>
 </html>

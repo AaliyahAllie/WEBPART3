@@ -41,7 +41,6 @@ $(document).ready(function(){
             }
         });
     });
-});
 
     // Remove from Shop button click event
     $(".remove-from-shop-button").click(function(){
@@ -61,10 +60,8 @@ $(document).ready(function(){
         });
     });
 
+});
 </script>
-
-
-
 
     <style>
         .item-image {
@@ -169,7 +166,7 @@ $(document).ready(function(){
                 <input type="file" name="itemImage" class="form-control-file" accept="image/*" required>
             </div>
             <button type="submit" class="btn btn-primary">Add Product</button>
-        </form>
+            </form>
     </div>
 
     <h2 class="text-center">Items in tblClothes</h2>
@@ -259,8 +256,7 @@ $(document).ready(function(){
                 echo "<td>
                     <form method='post' style='display:inline-block'>
                         <input type='hidden' name='action' value='delete'>
-                        <input type='hidden' name='
-                        item_id' value='" . $row['id'] . "'>
+                        <input type='hidden' name='item_id' value='" . $row['id'] . "'>
                         <button type='submit' class='delete-button'>Delete</button>
                         </form>
                         <form method='post' style='display:inline-block' enctype='multipart/form-data'>
@@ -281,84 +277,78 @@ $(document).ready(function(){
 
 
 <!-- Add remove from shop button -->
-<form method='post' style='display:inline-block'>
+<form method='post' style='display:inline-block' action='remove_from_shop.php'>
     <input type='hidden' name='action' value='remove'>
     <input type='hidden' name='item_id' value='" . $row['id'] . "'>
     <button type='submit' class='remove-from-shop-button btn btn-danger mt-2'>Remove from Shop</button>
-
-                        </form>
+</form>
                         </td>";
-                        echo "</tr>";
-                        }
-                        } else {
-                        echo "<tr><td colspan='6'>0 results</td></tr>";
-                        }
-                        echo "<h2 class='text-center'>User Clothes</h2>"; // Table heading for user clothes
-                        echo "<table class='table table-striped table-bordered mt-4'>"; // Start the table
-                        echo "<thead class='thead-dark'>"; // Table header
-                        echo "<tr>"; // Table row for column headings
-                        echo "<th>Image</th>";
-                        echo "<th>Name</th>";
-                        echo "<th>Description</th>";
-                        echo "<th>Size</th>";
-                        echo "<th>Price</th>";
-                        echo "<th>Actions</th>";
-                        echo "</tr>";
-                        echo "</thead>";
-                        echo "<tbody>";
-                        
-                        // Fetch data from the userClothes table
-                        $sql = "SELECT * FROM userClothes"; 
-                        $result = $conn->query($sql);
-                        
-                        if ($result->num_rows > 0) {
-                            // Output data of each row
-                            while($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'></td>";
-                                echo "<td>" . $row['itemName'] . "</td>";
-                                echo "<td>" . $row['itemDescription'] . "</td>";
-                                echo "<td>" . $row['itemSize'] . "</td>";
-                                echo "<td>$" . $row['itemPrice'] . "</td>";
-                                echo "<td>
-                                        <form method='post' style='display:inline-block'>
-                                            <input type='hidden' name='action' value='delete'>
-                                            <input type='hidden' name='item_id' value='" . $row['id'] . "'>
-                                            <button type='submit' class='delete-button'>Delete</button>
-                                        </form>
-                                        <form method='post' style='display:inline-block' enctype='multipart/form-data'>
-                                            <input type='hidden' name='action' value='edit'>
-                                            <input type='hidden' name='item_id' value='" . $row['id'] . "'>
-                                            <input type='text' name='itemName' class='form-control' value='" . $row['itemName'] . "' required>
-                                            <textarea name='itemDescription' class='form-control' required>" . $row['itemDescription'] . "</textarea>
-                                            <input type='text' name='itemSize' class='form-control' value='" . $row['itemSize'] . "' required>
-                                            <input type='text' name='itemPrice' class='form-control' value='" . $row['itemPrice'] . "' required>
-                                            <input type='file' name='itemImage' class='form-control-file' accept='image/*'>
-                                            <img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'>
-                                            <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='6'>0 results</td></tr>";
+        }
+        ?>
+        </tbody>
+    </table>
 
-                                            <button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "' data-tablename='userClothes'>Add to Shop</button>
+    <h2 class="text-center">User Clothes</h2>
+    <table class="table table-striped table-bordered mt-4">
+        <thead class="thead-dark">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        // Fetch data from the userClothes table
+        $sql = "SELECT * FROM userClothes";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // Output data of each row
+        while($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' alt='" . $row['itemName'] . "' class='item-image'></td>";
+            echo "<td>" . $row['itemName'] . "</td>";
+            echo "<td>" . $row['itemDescription'] . "</td>";
+            echo "<td>" . $row['itemSize'] . "</td>";
+            echo "<td>$" . $row['itemPrice'] . "</td>";
+            echo "<td>
+                    <form method='post' style='display:inline-block'>
+                        <input type='hidden' name='action' value='delete'>
+                        <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+                        <button type='submit' class='delete-button'>Delete</button>
+                    </form>
+                    <form method='post' style='display:inline-block' enctype='multipart/form-data'>
+                        <input type='hidden' name='action' value='edit'>
+                        <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+                        <input type='text' name='itemName' class='form-control' value='" . $row['itemName'] . "' required>
+                        <textarea name='itemDescription' class='form-control' required>" . $row['itemDescription'] . "</textarea>
+                        <input type='text' name='itemSize' class='form-control' value='" . $row['itemSize'] . "' required>
+                        <input type='text' name='itemPrice' class='form-control' value='" . $row['itemPrice'] . "' required>
+                        <input type='file' name='itemImage' class='form-control-file' accept='image/*'>
+                        <img src='data:image/jpeg;base64," . base64_encode($row['Image']) . "' class='item-image'>
+                        <button type='submit' class='edit-button btn btn-success mt-2'>Edit</button>
 
-                                            <!-- Add remove from shop button -->
-                                            <form method='post' style='display:inline-block'>
-                                                <input type='hidden' name='action' value='remove'>
-                                                <input type='hidden' name='item_id' value='" . $row['id'] . "'>
-                                                <button type='submit' class='remove-from-shop-button btn btn-danger mt-2'>Remove from Shop</button>
-                                        </form>
-                                      </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='6'>0 results</td></tr>";
-                        }
-                        echo "</tbody>";
-                        echo "</table>"; // End the table
-                        echo"</tbody>";
-                        echo"</table>";
-                    echo"</div>";
-                    echo"<!-- End of container -->";
-                    echo"</body>";
-                    echo"</html>";
-                    
-                    
-                        
+                        <button type='button' class='add-to-shop-button btn btn-primary mt-2' data-itemid='" . $row['id'] . "' data-tablename='userClothes'>Add to Shop</button>
+
+                        <!-- Add remove from shop button -->
+                        <form method='post' style='display:inline-block'>
+                            <input type='hidden' name='action' value='remove'>
+                            <input type='hidden' name='item_id' value='" . $row['id'] . "'>
+                            <button type='submit' class='remove-from-shop-button btn btn-danger mt-2'>Remove from Shop</button>
+                        </form>
+                    </td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='6'>0 results</td></tr>";
+    }
+    ?>
+    </tbody>
+</table>
